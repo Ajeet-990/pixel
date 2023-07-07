@@ -1,0 +1,11 @@
+{
+    "name": "task/bid",
+    "autoload": {
+        "psr-4": {
+            "Task\\Bid\\": "src/"
+        }
+    },
+    "require": {
+        "twig/twig": "3.0"
+    }
+}
