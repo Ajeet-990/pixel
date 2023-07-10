@@ -9,7 +9,7 @@ class BidModel
         $this->conn = $conn;
     }
 
-    public function getLatestBid()
+    public function getLatestBid() : string
     {
         $headers = ['Token:ab4086ecd47c568d5ba5739d4078988f'];
         $url = "https://dev.pixelsoftwares.com/api.php";
@@ -30,7 +30,7 @@ class BidModel
         return ($result);
     }
     
-    public function getLatestHitTime()
+    public function getLatestHitTime() : array
     {
         $curTime = time();
         $nexTime = $curTime + 60;
@@ -42,7 +42,7 @@ class BidModel
         return $countResult;
     }
 
-    public function updateHitCount(int $nextHitCount, $time)
+    public function updateHitCount(int $nextHitCount, $time) : bool
     {
         $updatHitCount = $this->conn->prepare('update bid_api set api_hit_count = ? where time = ?');
         $updatHitCount->bind_param('ii', $nextHitCount, $time);
@@ -54,12 +54,12 @@ class BidModel
         }
     }
 
-    public function addNewRecord(int $curTime)
+    public function addNewRecord(int $curTime) : bool
     {
         $first = 1;
         $addStmt = $this->conn->prepare("INSERT INTO `bid_api` (`time`, `api_hit_count`) VALUES (?, ?)");
         $addStmt->bind_param("ii", $curTime, $first);
-        $addStmt->execute();
+        return $addStmt->execute();
     }
 
 
