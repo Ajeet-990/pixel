@@ -3,8 +3,8 @@ $(document).ready(function(){
     let index = 0;
     function start()
     {
-        showBid();
-        intervals = setInterval(showBid, 60000);
+        var MILISECONDS_TO_CALL_API_AUTOMATICALLY = 60000;
+        intervals = setInterval(showBid, MILISECONDS_TO_CALL_API_AUTOMATICALLY);
     }
     function showBid() {
         $.ajax({
