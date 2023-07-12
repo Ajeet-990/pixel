@@ -9,7 +9,7 @@ class BidController
     private $_loader;
     private $_twig;
     private $bidModelObj;
-    //I am allowing 5 users per secoud to access the web page. If more than 5 users access the page within a second then other user will get high traffic message.
+    //I am allowing 5 users per secoud to access the web page. If more than 5 users access the page within a second then other user will get service from the cookie.
     const SECONDS_TO_CHECK_TRAFIC = 60;
     const NUMBER_OF_USERS_TO_ALLOW = 5;
     const COUNT_INCREMENT = 1;
