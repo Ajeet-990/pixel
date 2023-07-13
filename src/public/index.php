@@ -9,7 +9,7 @@ $conn = $db->getConnection();
 $bidModelObj = new BidModel($conn);
 $pControllerObj = new BidController($bidModelObj);
 
-$curTime = time();
+$curTime = microtime(true);
 $secondsTocheck = BidController::SECONDS_TO_CHECK_TRAFIC;
 $numberOfUsers = BidController::NUMBER_OF_USERS_TO_ALLOW;
 $increment = BidController::COUNT_INCREMENT;

@@ -62,12 +62,13 @@ class BidModel
         }
     }
 
-    public function addNewRecord(float $bidPrice, int $curTime) : bool
+    public function addNewRecord(float $bidPrice, float $curTime) : bool
     {
         $first = 1;
         $addStmt = $this->conn->prepare("INSERT INTO `bid_api` (`bidPrice`, `time`, `api_hit_count`) VALUES (?, ?, ?)");
-        $addStmt->bind_param("dii", $bidPrice, $curTime, $first);
-        return $addStmt->execute();
+        $addStmt->bind_param("ddi", $bidPrice, $curTime, $first);
+        $result = $addStmt->execute();
+        return $result;
     }
 
 
