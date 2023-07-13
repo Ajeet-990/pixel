@@ -21,9 +21,39 @@ class BidController
         $this->bidModelObj = $bidModelObj;
     }
 
-    public function getLandingPage(float $bidPrice)
+    public function getLandingPage()
     {
-        echo $this->_twig->render('showBidDetails.html.twig', ['latestBid' => $bidPrice]);
+        $curTime = microtime(true);
+        $secondsTocheck = BidController::SECONDS_TO_CHECK_TRAFIC;
+        $numberOfUsers = BidController::NUMBER_OF_USERS_TO_ALLOW;
+        $increment = BidController::COUNT_INCREMENT;
+        $checkRecordNum = $this->bidModelObj->checkRecord();
+        if (count($checkRecordNum) > 0) {
+            $countResult = $this->bidModelObj->getLatestHitTimeAndBid();
+            $nextHitCount = $countResult['api_hit_count'] + $increment;
+            $cookie_name = "bidPrice";
+            $cookie_value = $countResult['bidPrice'];
+            setcookie($cookie_name, $cookie_value, $countResult['time'] + 60, "/");
+            if (($countResult['time'] + $secondsTocheck) >= $curTime) {
+            if ($countResult['api_hit_count'] < $numberOfUsers) {
+                echo $this->_twig->render('showBidDetails.html.twig', ['latestBid' => $countResult['bidPrice']]);
+                $this->bidModelObj->updateHitCount($nextHitCount, $countResult['time']);
+            } else {
+                echo $this->_twig->render('showBidDetails.html.twig', ['latestBid' => $_COOKIE[$cookie_name]]);
+
+                $this->bidModelObj->updateHitCount($nextHitCount, $countResult['time']);
+            }
+            } else {
+                echo $this->_twig->render('showBidDetails.html.twig', ['latestBid' => $countResult['bidPrice']]);
+            } 
+            
+        } else {
+            $dataRst = $this->bidModelObj->getLatestBid();
+            $bidData = (array)json_decode($dataRst);
+            $bid = (array)$bidData['data'];
+            $this->bidModelObj->addNewRecord($bid['bidPrice'], $curTime);
+            echo $this->_twig->render('showBidDetails.html.twig', ['latestBid' => $bid['bidPrice']]);
+        }
     }
 
 }
