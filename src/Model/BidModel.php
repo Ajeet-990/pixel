@@ -42,6 +42,14 @@ class BidModel
         return $countResult;
     }
 
+    public function checkRecord()
+    {
+        $checkRecord = $this->conn->prepare('SELECT id FROM bid_api');
+        $checkRecord->execute();
+        $Result = $checkRecord->get_result()->fetch_all(MYSQLI_ASSOC);
+        return $Result;
+    }
+
     public function updateHitCount(int $nextHitCount, $time) : bool
     {
         $updatHitCount = $this->conn->prepare('update bid_api set api_hit_count = ? where time = ?');

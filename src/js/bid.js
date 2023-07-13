@@ -8,6 +8,9 @@ $(document).ready(function(){
         setInterval(showBid, MILISECONDS_TO_CALL_API_AUTOMATICALLY);
         setInterval(updateBidInBrowser, MILISECONDS_TO_UPDATE_BID_PRICE);
     }
+    function sleep(milliseconds) {  
+        return new Promise(resolve => setTimeout(resolve, milliseconds));  
+     }  
     function updateBidInBrowser() {
         $.ajax({
             type: "POST",
@@ -18,7 +21,8 @@ $(document).ready(function(){
             }
         });
     }
-    function showBid() {
+    async function showBid() {
+        await sleep(2000); 
         $.ajax({
             type: "POST",
             url: "src/public/bidAction.php",
