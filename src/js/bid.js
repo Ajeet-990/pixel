@@ -4,15 +4,26 @@ $(document).ready(function(){
     function start()
     {
         var MILISECONDS_TO_CALL_API_AUTOMATICALLY = 60000;
-        intervals = setInterval(showBid, MILISECONDS_TO_CALL_API_AUTOMATICALLY);
+        var MILISECONDS_TO_UPDATE_BID_PRICE = 10000;
+        setInterval(showBid, MILISECONDS_TO_CALL_API_AUTOMATICALLY);
+        setInterval(updateBidInBrowser, MILISECONDS_TO_UPDATE_BID_PRICE);
+    }
+    function updateBidInBrowser() {
+        $.ajax({
+            type: "POST",
+            url: "src/public/bidAction.php",
+            data: {updateBidPrice : true},
+            success: function(response){
+                $('#latestBid').text(response)
+            }
+        });
     }
     function showBid() {
         $.ajax({
             type: "POST",
             url: "src/public/bidAction.php",
-            data: {startbutton : true},
+            data: {getBidFromApi : true},
             success: function(response){
-                $('#latestBid').text(response)
                 var div = document.getElementById('#showBidData');
                 div.innerHTML += '<p> '+index+'] $'+response+'</p>';
             }
