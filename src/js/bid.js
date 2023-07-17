@@ -1,29 +1,28 @@
-var intervals;
-$(document).ready(function(){
+$(document).ready(function(){ 
     let index = 0;
+    let MILISECONDS_TO_UPDATE_BID_PRICE = 10000;
+    let MILISECONDS_TO_CALL_API_AUTOMATICALLY = 60000;
+    let canCallRequest=false;
     function start()
     {
-        var MILISECONDS_TO_CALL_API_AUTOMATICALLY = 60000;
-        var MILISECONDS_TO_UPDATE_BID_PRICE = 10000;
-        setInterval(showBid, MILISECONDS_TO_CALL_API_AUTOMATICALLY);
-        setInterval(updateBidInBrowser, MILISECONDS_TO_UPDATE_BID_PRICE);
+        window.onfocus = function () {
+            canCallRequest= true; 
+            setInterval(showBid, MILISECONDS_TO_CALL_API_AUTOMATICALLY);
+          }; 
+          
+          window.onblur = function () {
+            canCallRequest = false; 
+          }; 
     }
-    function updateBidInBrowser() {
-        $.ajax({
-            type: "POST",
-            url: "src/public/bidAction.php",
-            data: {updateBidPrice : true},
-            success: function(response){
-                $('#latestBid').text(response)
-            }
-        });
-    }
-    async function showBid() {
+
+    function showBid() {
+        if(!canCallRequest) return;
         $.ajax({
             type: "POST",
             url: "src/public/bidAction.php",
             data: {getBidFromApi : true},
             success: function(response){
+                $('#latestBid').text(response)
                 var div = document.getElementById('#showBidData');
                 div.innerHTML += '<p> '+index+'] $'+response+'</p>';
             }
