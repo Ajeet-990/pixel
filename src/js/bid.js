@@ -1,8 +1,7 @@
 $(document).ready(function(){ 
     let index = 0;
-    let MILISECONDS_TO_UPDATE_BID_PRICE = 10000;
     let MILISECONDS_TO_CALL_API_AUTOMATICALLY = 60000;
-    let canCallRequest=false;
+    let canCallRequest=true;
     function start()
     {
         window.onfocus = function () {

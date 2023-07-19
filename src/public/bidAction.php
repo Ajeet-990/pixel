@@ -7,11 +7,9 @@ $conn = $db->getConnection();
 $bidModelObj = new BidModel($conn);
 $getLatestHitTime = $bidModelObj->getLatestHitTimeAndBid();
 $curTime = microtime(true);
-if (isset($_POST['updateBidPrice']) && $_POST['updateBidPrice'] == true) {
-    echo $getLatestHitTime['bidPrice'];
-}
+$timeTOCheckForApiHit = 59;
 if (isset($_POST['getBidFromApi']) && $_POST['getBidFromApi'] == true) {
-    if (($curTime - $getLatestHitTime['time']) > 59) {
+    if (($curTime - $getLatestHitTime['time']) > $timeTOCheckForApiHit) {
     $dataRst = $bidModelObj->getLatestBid();
     $bidData = (array)json_decode($dataRst);
     $bid = (array)$bidData['data'];
